@@ -9,6 +9,9 @@ Colo black
 "colo darker-robin
 "au FileType python Colo black
 
+"Pathogen
+execute pathogen#infect()
+
 "debug loaded plugins
 "let g:loaded_shell = 1
 "let loaded_libList = 1
