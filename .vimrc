@@ -97,6 +97,7 @@ set ofu=syntaxcomplete#Complete
 
 "turn on line numbering
 set relativenumber
+set nu
 au filetype log set nonumber
 
 "get correct tab stops
