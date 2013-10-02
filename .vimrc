@@ -79,7 +79,7 @@ let g:tex_flavor = "latex"
 
 
 "correct word wrapping
-set wrap
+set nowrap
 set linebreak
 set nolist
 set tw=0
