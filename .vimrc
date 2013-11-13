@@ -11,6 +11,8 @@ set visualbell
 
 colo moria
 Colo black
+"for low contrast
+"colo morning
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 autocmd FileType python set complete+=k~/.vim/syntax/python.vim
 filetype plugin indent on
