@@ -9,12 +9,10 @@ syntax on
 set t_vb=
 set visualbell
 
-colo moria
-Colo black
-"for low contrast
-"colo morning
+"colo moria
+"Colo black
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
-autocmd FileType python set complete+=k~/.vim/syntax/python.vim
+"autocmd FileType python set complete+=k~/.vim/syntax/python.vim
 filetype plugin indent on
 
 "Save undo and backup files to centralized dir
@@ -95,7 +93,7 @@ au filetype tex set tw=79
 au filetype sas set tw=79
 au filetype R set tw=79
 au filetype mail set tw=79
-set ofu=syntaxcomplete#Complete
+"set ofu=syntaxcomplete#Complete
 
 "turn on line numbering
 set relativenumber
@@ -135,7 +133,7 @@ let g:netrw_browsex_viewer= "gnome-open"
 set autochdir
 
 "python code completion
-let g:pydiction_location = "/home/bart/.vim/pydiction/complete-dict"
+"let g:pydiction_location = "/home/bart/.vim/pydiction/complete-dict"
 set laststatus=2
 set statusline+=,%{GitBranchInfoString()}
 set statusline=%t\ %m\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ %{GitBranchInfoString()}%=\ %c,%l\ %P
@@ -168,6 +166,8 @@ if has("gui_running")
     Colo black
 else 
     colo calmar256-dark
+    "for low contrast
+    "colo blue
 endif
 
 "Add shortcut for NERDTree
@@ -259,6 +259,8 @@ nnoremap * :call SuperStar()<CR>:set hls<CR>
 
 "django html highlighting
 nmap <leader>sd <Esc>:setfiletype htmldjango<cr>
+
+nnoremap <silent> <Leader>/ :nohlsearch<CR>
 
 """""""""""""""""""""""
 "Python mode settings
