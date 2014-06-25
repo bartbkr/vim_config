@@ -82,7 +82,7 @@ let g:tex_flavor = "latex"
 set nowrap
 set linebreak
 set nolist
-set tw=0
+"set tw=0
 set wrapmargin=0
 set formatoptions+=1
 
@@ -92,7 +92,8 @@ au filetype c set tw=79
 au filetype tex set tw=79
 au filetype sas set tw=79
 au filetype R set tw=79
-au filetype mail set tw=79
+au filetype mail set tw=72
+au filetype text set tw=72
 "set ofu=syntaxcomplete#Complete
 
 "turn on line numbering
@@ -108,7 +109,20 @@ au filetype cpp set tabstop=4 softtabstop=4 shiftwidth=4 relativenumber
 au filetype python set tabstop=4 softtabstop=4 shiftwidth=4 relativenumber
 au filetype txt set tabstop=4 softtabstop=4 shiftwidth=4 relativenumber
 au filetype r set tabstop=4 softtabstop=4 shiftwidth=4 relativenumber
-au filetype mail set tabstop=2 softtabstop=2 shiftwidth=2 relativenumber tw=79
+au filetype mail set tabstop=2 softtabstop=2 shiftwidth=2 relativenumber
+au filetype netrw set relativenumber
+
+"remove bad white space before saving
+fun! <SID>StripTrailingWhiteSpaces()
+  let l = line(".")
+  let c = col(".")
+  %s/\s\+$//e
+  call cursor(l, c)
+endfun
+
+au BufWritePre *.py :call <SID>StripTrailingWhiteSpaces()
+au BufWritePre *.c :call <SID>StripTrailingWhiteSpaces()
+au BufWritePre *.tex :call <SID>StripTrailingWhiteSpaces()
 
 "set gui options
 set guioptions-=m "remove menu bar
@@ -129,14 +143,15 @@ let g:netrw_special_syntax = 1
 let g:netrw_menu=1
 let g:netrw_browsex_viewer= "gnome-open"
 
+"let g:netrw_localmovecmd = mv
+
 " Change directory to the current buffer when opening files.
 set autochdir
 
 "python code completion
 "let g:pydiction_location = "/home/bart/.vim/pydiction/complete-dict"
 set laststatus=2
-set statusline+=,%{GitBranchInfoString()}
-set statusline=%t\ %m\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ %{GitBranchInfoString()}%=\ %c,%l\ %P
+set statusline=%t\ %m\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ %{fugitive#statusline()}%=\ %c,%l\ %P
 let g:git_branch_status_head_current=1
 let g:git_branch_status_text=""
 
@@ -168,6 +183,7 @@ else
     colo calmar256-dark
     "for low contrast
     "colo blue
+    "colo calmar256-light
 endif
 
 "Add shortcut for NERDTree
@@ -234,8 +250,8 @@ nnoremap <Leader>yp :let @"=expand("%:p")<CR>
 nnoremap <Leader>yn :let @"=expand("%")<CR>
 
 "python browse to next function
-nmap <Leader>fn <Esc>/ *def <CR> zt
-nmap <Leader>fN <Esc>? *def <CR> zt
+nmap <Leader>fn <Esc>/ *def <CR> zz
+nmap <Leader>fN <Esc>? *def <CR> zz
 
 "shortcut for vimgrep results view
 map <leader>cc :botright cope<cr>
@@ -262,101 +278,104 @@ nmap <leader>sd <Esc>:setfiletype htmldjango<cr>
 
 nnoremap <silent> <Leader>/ :nohlsearch<CR>
 
+"turn off search highlighting
+nmap <leader>cs <Esc>:noh<CR>
+
 """""""""""""""""""""""
 "Python mode settings
 """"""""""""""""""""""
-let g:pymode_run = 1
-let g:pymode_run_key='<leader>rp'
-" Load pylint code plugin
-let g:pymode_lint = 1
-" Switch pylint, pyflakes, pep8, mccabe code-checkers
-" Can have multiply values "pep8,pyflakes,mcccabe"
-let g:pymode_lint_checker = "pyflakes,pep8,mccabe"
-"
-" Skip errors and warnings
-" E.g. "E501,W002", "E2,W" (Skip all Warnings and Errors startswith E2) and etc
-let g:pymode_lint_ignore = ""
-
-" Select errors and warnings
-" E.g. "E4,W"
-let g:pymode_lint_select = ""
-
-" Run linter on the fly
-let g:pymode_lint_onfly = 0
-
-" Pylint configuration file
-" If file not found use 'pylintrc' from python-mode plugin directory
-let g:pymode_lint_config = "$HOME/.pylintrc"
-
-" Check code every save
-let g:pymode_lint_write = 0
-
-" Auto open cwindow if errors are found
-let g:pymode_lint_cwindow = 0
-
-" Show error message if cursor placed at the error line
-let g:pymode_lint_message = 1
-
-" Auto jump on first error
-let g:pymode_lint_jump = 0
-
-" Hold cursor in current window
-" when quickfix is open
-let g:pymode_lint_hold = 0
-
-" Place error signs
-let g:pymode_lint_signs = 1
-
-" Maximum allowed mccabe complexity
-let g:pymode_lint_mccabe_complexity = 8
-
-" Minimal height of pylint error window
-let g:pymode_lint_minheight = 3
-
-" Maximal height of pylint error window
-let g:pymode_lint_maxheight = 6
-
-" Enable python folding
-let g:pymode_folding = 1
-
-" Enable python objects and motion
-let g:pymode_motion = 1
-
-" Enable pymode's custom syntax highlighting
-let g:pymode_syntax = 1
-
-" Enable all python highlightings
-let g:pymode_syntax_all = 1
-
-" Highlight "print" as function
-let g:pymode_syntax_print_as_function = 0
-
-" Highlight indentation errors
-let g:pymode_syntax_indent_errors = g:pymode_syntax_all
-
-" Highlight trailing spaces
-let g:pymode_syntax_space_errors = g:pymode_syntax_all
-
-" Highlight string formatting
-let g:pymode_syntax_string_formatting = g:pymode_syntax_all
-
-" Highlight str.format syntax
-let g:pymode_syntax_string_format = g:pymode_syntax_all
-
-" Highlight string.Template syntax
-let g:pymode_syntax_string_templates = g:pymode_syntax_all
-
-" Highlight doc-tests
-let g:pymode_syntax_doctests = g:pymode_syntax_all
-
-" Highlight builtin objects (__doc__, self, etc)
-let g:pymode_syntax_builtin_objs = g:pymode_syntax_all
-
-" Highlight builtin functions
-let g:pymode_syntax_builtin_funcs = g:pymode_syntax_all
-
-" Highlight exceptions
-let g:pymode_syntax_highlight_exceptions = g:pymode_syntax_all
-
-" For fast machines
-let g:pymode_syntax_slow_sync = 0
+" let g:pymode_run = 1
+" let g:pymode_run_key='<leader>rp'
+" " Load pylint code plugin
+" let g:pymode_lint = 1
+" " Switch pylint, pyflakes, pep8, mccabe code-checkers
+" " Can have multiply values "pep8,pyflakes,mcccabe"
+" let g:pymode_lint_checker = "pyflakes,pep8,mccabe"
+" "
+" " Skip errors and warnings
+" " E.g. "E501,W002", "E2,W" (Skip all Warnings and Errors startswith E2) and etc
+" let g:pymode_lint_ignore = ""
+" 
+" " Select errors and warnings
+" " E.g. "E4,W"
+" let g:pymode_lint_select = ""
+" 
+" " Run linter on the fly
+" let g:pymode_lint_onfly = 0
+" 
+" " Pylint configuration file
+" " If file not found use 'pylintrc' from python-mode plugin directory
+" let g:pymode_lint_config = "$HOME/.pylintrc"
+" 
+" " Check code every save
+" let g:pymode_lint_write = 0
+" 
+" " Auto open cwindow if errors are found
+" let g:pymode_lint_cwindow = 0
+" 
+" " Show error message if cursor placed at the error line
+" let g:pymode_lint_message = 1
+" 
+" " Auto jump on first error
+" let g:pymode_lint_jump = 0
+" 
+" " Hold cursor in current window
+" " when quickfix is open
+" let g:pymode_lint_hold = 0
+" 
+" " Place error signs
+" let g:pymode_lint_signs = 1
+" 
+" " Maximum allowed mccabe complexity
+" let g:pymode_lint_mccabe_complexity = 8
+" 
+" " Minimal height of pylint error window
+" let g:pymode_lint_minheight = 3
+" 
+" " Maximal height of pylint error window
+" let g:pymode_lint_maxheight = 6
+" 
+" " Enable python folding
+" let g:pymode_folding = 1
+" 
+" " Enable python objects and motion
+" let g:pymode_motion = 1
+" 
+" " Enable pymode's custom syntax highlighting
+" let g:pymode_syntax = 1
+" 
+" " Enable all python highlightings
+" let g:pymode_syntax_all = 1
+" 
+" " Highlight "print" as function
+" let g:pymode_syntax_print_as_function = 0
+" 
+" " Highlight indentation errors
+" let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+" 
+" " Highlight trailing spaces
+" let g:pymode_syntax_space_errors = g:pymode_syntax_all
+" 
+" " Highlight string formatting
+" let g:pymode_syntax_string_formatting = g:pymode_syntax_all
+" 
+" " Highlight str.format syntax
+" let g:pymode_syntax_string_format = g:pymode_syntax_all
+" 
+" " Highlight string.Template syntax
+" let g:pymode_syntax_string_templates = g:pymode_syntax_all
+" 
+" " Highlight doc-tests
+" let g:pymode_syntax_doctests = g:pymode_syntax_all
+" 
+" " Highlight builtin objects (__doc__, self, etc)
+" let g:pymode_syntax_builtin_objs = g:pymode_syntax_all
+" 
+" " Highlight builtin functions
+" let g:pymode_syntax_builtin_funcs = g:pymode_syntax_all
+" 
+" " Highlight exceptions
+" let g:pymode_syntax_highlight_exceptions = g:pymode_syntax_all
+" 
+" " For fast machines
+" let g:pymode_syntax_slow_sync = 0
